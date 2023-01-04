@@ -32,10 +32,10 @@ type Create struct {
 }
 
 type Update struct {
-	Id       int    `form:"id" json:"id"`
-	Username string `form:"username" json:"username"`
-	Password string `form:"password" json:"password"`
-	Avatar   string `form:"avatar" json:"avatar"`
+	Id       int     `form:"id" json:"id"`
+	Username string  `form:"username" json:"username"`
+	Password string  `form:"password" json:"password"`
+	Avatar   *string `form:"avatar" json:"avatar"`
 }
 
 type UpdateForm struct {

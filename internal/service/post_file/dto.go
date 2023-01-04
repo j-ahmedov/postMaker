@@ -7,17 +7,17 @@ type Filter struct {
 	Offset *int
 }
 
-type List struct {
-	Id     int    `json:"id"`
-	PostId int    `json:"post_id"`
-	Link   string `json:"link"`
-}
-
-type Detail struct {
-	Id     int    `json:"id"`
-	PostId int    `json:"post_id"`
-	Link   string `json:"link"`
-}
+//type List struct {
+//	Id     int    `json:"id"`
+//	PostId int    `json:"post_id"`
+//	Link   string `json:"link"`
+//}
+//
+//type Detail struct {
+//	Id     int    `json:"id"`
+//	PostId int    `json:"post_id"`
+//	Link   string `json:"link"`
+//}
 
 type FileCreate struct {
 	PostId int                   `form:"post_id"`
@@ -25,14 +25,14 @@ type FileCreate struct {
 }
 
 type Create struct {
-	PostId int    `form:"post_id"`
-	Link   string `form:"link"`
+	PostId int    `form:"post_id" json:"post_id"`
+	Link   string `form:"link" json:"link"`
 }
 
 type Update struct {
-	Id     int    `form:"id"`
-	PostId int    `form:"post_id"`
-	Link   string `form:"link"`
+	Id     int    `form:"id" json:"id"`
+	PostId int    `form:"post_id" json:"post_id"`
+	Link   string `form:"link" json:"link"`
 }
 
 type FileUpdate struct {
@@ -44,26 +44,26 @@ type FileUpdate struct {
 // Multiple Files
 
 type MultipleList struct {
-	Id     int      `json:"id"`
-	PostId int      `json:"post_id"`
-	Link   []string `json:"link"`
+	Id     int       `json:"id"`
+	PostId int       `json:"post_id"`
+	Link   *[]string `json:"link"`
 }
 
 type MultipleDetail struct {
-	Id     int      `json:"id"`
-	PostId int      `json:"post_id"`
-	Link   []string `json:"link"`
+	Id     int       `json:"id"`
+	PostId int       `json:"post_id"`
+	Link   *[]string `json:"link"`
 }
 
 type MCreate struct {
-	PostId int      `form:"post_id"`
-	Link   []string `form:"link"`
+	PostId int       `form:"post_id" json:"post_id"`
+	Link   *[]string `form:"link" json:"link"`
 }
 
 type MUpdate struct {
-	Id     int      `form:"id"`
-	PostId int      `form:"post_id"`
-	Link   []string `form:"link"`
+	Id     int       `form:"id" json:"id"`
+	PostId int       `form:"post_id" json:"post_id"`
+	Link   *[]string `form:"link" json:"link"`
 }
 
 type MultipleCreate struct {

@@ -10,6 +10,7 @@ import (
 type User interface {
 	GetAll(ctx context.Context, filter user.Filter) ([]entity.User, int, error)
 	GetById(ctx context.Context, id int) (entity.User, error)
+	GetByUsername(ctx context.Context, username string) (entity.User, error)
 	Create(ctx context.Context, data user.Create) (entity.User, error)
 	Update(ctx context.Context, data user.Update) (entity.User, error)
 	Delete(ctx context.Context, id int) error

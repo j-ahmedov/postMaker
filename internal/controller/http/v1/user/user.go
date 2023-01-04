@@ -162,7 +162,7 @@ func (cc Controller) UpdateUser(c *gin.Context) {
 	tokenString := c.GetHeader("Authorization")
 	tokenString = strings.Split(tokenString, "Bearer ")[1]
 
-	_, err := auth.ParseToken(tokenString)
+	userData, err := auth.ParseToken(tokenString)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"message": err.Error(),
@@ -177,6 +177,14 @@ func (cc Controller) UpdateUser(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"message": err.Error(),
+			"status":  false,
+		})
+		return
+	}
+
+	if data.Id != userData.Id {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "this user doesn't have access to make changes",
 			"status":  false,
 		})
 		return
@@ -204,7 +212,7 @@ func (cc Controller) DeleteUser(c *gin.Context) {
 	tokenString := c.GetHeader("Authorization")
 	tokenString = strings.Split(tokenString, "Bearer ")[1]
 
-	_, err := auth.ParseToken(tokenString)
+	userData, err := auth.ParseToken(tokenString)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"message": err.Error(),
@@ -215,10 +223,27 @@ func (cc Controller) DeleteUser(c *gin.Context) {
 
 	idParams := c.Param("id")
 
-	id, err := strconv.Atoi(idParams)
-	if err != nil {
+	id, err1 := strconv.Atoi(idParams)
+	if err1 != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"message": err.Error(),
+			"status":  false,
+		})
+		return
+	}
+
+	data, err2 := cc.useCase.GetUserById(c, id)
+	if err2 != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"message": err.Error(),
+			"status":  false,
+		})
+		return
+	}
+
+	if data.Id != userData.Id {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "this user doesn't have access to make changes",
 			"status":  false,
 		})
 		return

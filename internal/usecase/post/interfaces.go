@@ -28,8 +28,9 @@ type PostLike interface {
 type PostFile interface {
 	GetAll(ctx context.Context, filter post_file.Filter) ([]entity.PostFile, int, error)
 	GetById(ctx context.Context, id int) (entity.PostFile, error)
-	Create(ctx context.Context, data post_file.Create) (entity.PostFile, error)
-	Update(ctx context.Context, data post_file.Update) (entity.PostFile, error)
+	GetByPostId(ctx context.Context, postId int) (entity.PostFile, error)
+	Create(ctx context.Context, data post_file.MCreate) (entity.PostFile, error)
+	Update(ctx context.Context, data post_file.MUpdate) (entity.PostFile, error)
 	Delete(ctx context.Context, id int) error
 }
 
@@ -41,5 +42,5 @@ type File interface {
 
 type User interface {
 	GetById(ctx context.Context, id int) (entity.User, error)
-	GetByUsername(ctx context.Context, username string) (entity.User, error)
+	//GetByUsername(ctx context.Context, username string) (entity.User, error)
 }

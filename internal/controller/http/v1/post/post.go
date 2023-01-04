@@ -86,17 +86,17 @@ func (cc Controller) GetPostList(c *gin.Context) {
 }
 
 func (cc Controller) GetPostById(c *gin.Context) {
-	tokenString := c.GetHeader("Authorization")
-	tokenString = strings.Split(tokenString, "Bearer ")[1]
-
-	claims, err := auth.ParseToken(tokenString)
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"message": err.Error(),
-			"status":  false,
-		})
-		return
-	}
+	//tokenString := c.GetHeader("Authorization")
+	//tokenString = strings.Split(tokenString, "Bearer ")[1]
+	//
+	//claims, err := auth.ParseToken(tokenString)
+	//if err != nil {
+	//	c.JSON(http.StatusOK, gin.H{
+	//		"message": err.Error(),
+	//		"status":  false,
+	//	})
+	//	return
+	//}
 
 	idParams := c.Param("id")
 
@@ -111,7 +111,7 @@ func (cc Controller) GetPostById(c *gin.Context) {
 
 	ctx := context.Background()
 
-	detail, err := cc.useCase.GetPostById(ctx, id, claims.Username)
+	detail, err := cc.useCase.GetPostById(ctx, id)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"message": err.Error(),

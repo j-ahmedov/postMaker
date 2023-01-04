@@ -34,7 +34,7 @@ func (r Repository) GetAll(ctx context.Context, filter comment.Filter) ([]entity
 
 func (r Repository) GetAllByPostId(ctx context.Context, filter comment.Filter, postId int) ([]entity.Comment, int, error) {
 	var list []entity.Comment
-	q := r.NewSelect().Model(&list).Where("post_id = ", postId)
+	q := r.NewSelect().Model(&list).Where("post_id = ?", postId)
 
 	if filter.Limit != nil {
 		q.Limit(*filter.Limit)

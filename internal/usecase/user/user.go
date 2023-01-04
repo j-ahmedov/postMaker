@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"errors"
 	"postMaker/internal/service/auth"
 	"postMaker/internal/service/user"
 )
@@ -59,6 +60,12 @@ func (cu UseCase) CreateUser(ctx context.Context, createForm user.CreateForm) (u
 
 	var avatarLink string
 	var err error
+
+	_, err1 := cu.user.GetByUsername(ctx, createForm.Username)
+	if err1 == nil {
+		err2 := errors.New("user with such username already exists")
+		return user.Detail{}, err2
+	}
 
 	var create user.Create
 
@@ -124,7 +131,7 @@ func (cu UseCase) UpdateUser(ctx context.Context, updateForm user.UpdateForm) (u
 	update.Id = updateForm.Id
 	update.Username = updateForm.Username
 	update.Password = hashPassword
-	update.Avatar = avatarLink
+	update.Avatar = &avatarLink
 
 	data, err := cu.user.Update(ctx, update)
 	if err != nil {

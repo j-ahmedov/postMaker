@@ -22,7 +22,6 @@ func (s Service) GetById(ctx context.Context, id int) (entity.Post, error) {
 }
 
 func (s Service) Create(ctx context.Context, data Create) (entity.Post, error) {
-
 	return s.repo.Create(ctx, data)
 }
 

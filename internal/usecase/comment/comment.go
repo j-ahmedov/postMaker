@@ -55,9 +55,9 @@ func (cu UseCase) GetCommentListByPostId(ctx context.Context, filter comment.Fil
 	for _, r := range data {
 		var detail comment.PostDetail
 
-		user, err := cu.user.GetById(ctx, r.UserId)
-		if err != nil {
-			return nil, 0, err
+		user, err1 := cu.user.GetById(ctx, r.UserId)
+		if err1 != nil {
+			return nil, 0, err1
 		}
 
 		detail.Id = r.Id
@@ -117,10 +117,26 @@ func (cu UseCase) GetCommentByPostId(ctx context.Context, postId int) (comment.P
 	return detail, err
 }
 
-func (cu UseCase) CreateComment(ctx context.Context, create comment.Create) (entity.Comment, error) {
+func (cu UseCase) CreateComment(ctx context.Context, create comment.Create) (comment.PostDetail, error) {
 	data, err := cu.comment.Create(ctx, create)
+	if err != nil {
+		return comment.PostDetail{}, err
+	}
 
-	return data, err
+	user, err := cu.user.GetById(ctx, data.UserId)
+	if err != nil {
+		return comment.PostDetail{}, err
+	}
+
+	var detail comment.PostDetail
+
+	detail.Id = data.Id
+	detail.Text = data.Text
+	detail.User.Username = user.Username
+	detail.User.Avatar = *user.Avatar
+	detail.CreatedAt = data.CreatedAt.Format("02-01-2006")
+
+	return detail, err
 }
 
 func (cu UseCase) UpdateComment(ctx context.Context, update comment.Update) (entity.Comment, error) {

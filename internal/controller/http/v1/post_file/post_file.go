@@ -128,7 +128,49 @@ func (cc Controller) GetPostFileById(c *gin.Context) {
 
 }
 
-func (cc Controller) CreatePostFile(c *gin.Context) {
+//func (cc Controller) CreatePostFile(c *gin.Context) {
+//	tokenString := c.GetHeader("Authorization")
+//	tokenString = strings.Split(tokenString, "Bearer ")[1]
+//
+//	_, err := auth.ParseToken(tokenString)
+//	if err != nil {
+//		c.JSON(http.StatusOK, gin.H{
+//			"message": err.Error(),
+//			"status":  false,
+//		})
+//		return
+//	}
+//
+//	var data post_file.MultipleCreate
+//
+//	err = c.ShouldBind(&data)
+//	if err != nil {
+//		c.JSON(http.StatusOK, gin.H{
+//			"message": err.Error(),
+//			"status":  false,
+//		})
+//		return
+//	}
+//
+//	ctx := context.Background()
+//
+//	newData, err := cc.useCase.CreateMultipleFiles(ctx, data)
+//	if err != nil {
+//		c.JSON(http.StatusOK, gin.H{
+//			"message": err.Error(),
+//			"status":  false,
+//		})
+//		return
+//	}
+//
+//	c.JSON(http.StatusOK, gin.H{
+//		"message": "ok!",
+//		"status":  true,
+//		"data":    newData,
+//	})
+//}
+
+func (cc Controller) CreateMultiplePostFiles(c *gin.Context) {
 	tokenString := c.GetHeader("Authorization")
 	tokenString = strings.Split(tokenString, "Bearer ")[1]
 
@@ -170,7 +212,7 @@ func (cc Controller) CreatePostFile(c *gin.Context) {
 	})
 }
 
-func (cc Controller) UpdatePostFile(c *gin.Context) {
+func (cc Controller) UpdateMultiplePostFiles(c *gin.Context) {
 	tokenString := c.GetHeader("Authorization")
 	tokenString = strings.Split(tokenString, "Bearer ")[1]
 
@@ -183,7 +225,7 @@ func (cc Controller) UpdatePostFile(c *gin.Context) {
 		return
 	}
 
-	var data post_file.FileUpdate
+	var data post_file.MultipleUpdate
 
 	err = c.ShouldBind(&data)
 	if err != nil {
@@ -196,7 +238,7 @@ func (cc Controller) UpdatePostFile(c *gin.Context) {
 
 	ctx := context.Background()
 
-	newData, err := cc.useCase.UpdatePostFile(ctx, data)
+	newData, err := cc.useCase.UpdateMultiplePostFiles(ctx, data)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"message": err.Error(),
@@ -240,7 +282,7 @@ func (cc Controller) DeletePostFile(c *gin.Context) {
 
 	ctx := context.Background()
 
-	err = cc.useCase.DeletePostFile(ctx, id)
+	err = cc.useCase.DeletePostFiles(ctx, id)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"message": err.Error(),

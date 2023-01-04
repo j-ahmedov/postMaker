@@ -39,18 +39,26 @@ func (r Repository) GetById(ctx context.Context, id int) (entity.PostFile, error
 	return detail, err
 }
 
-func (r Repository) Create(ctx context.Context, data post_file.Create) (entity.PostFile, error) {
+func (r Repository) GetByPostId(ctx context.Context, postId int) (entity.PostFile, error) {
+	var detail entity.PostFile
+
+	err := r.NewSelect().Model(&detail).Where("post_id = ?", postId).Scan(ctx)
+
+	return detail, err
+}
+
+func (r Repository) Create(ctx context.Context, data post_file.MCreate) (entity.PostFile, error) {
 	var detail entity.PostFile
 
 	detail.PostId = data.PostId
-	detail.Link = data.Link
+	detail.Link = *data.Link
 
 	_, err := r.NewInsert().Model(&detail).Exec(ctx)
 
 	return detail, err
 }
 
-func (r Repository) Update(ctx context.Context, data post_file.Update) (entity.PostFile, error) {
+func (r Repository) Update(ctx context.Context, data post_file.MUpdate) (entity.PostFile, error) {
 	var detail entity.PostFile
 
 	err := r.NewSelect().Model(&detail).Where("id = ?", data.Id).Scan(ctx)
@@ -60,7 +68,7 @@ func (r Repository) Update(ctx context.Context, data post_file.Update) (entity.P
 
 	detail.Id = data.Id
 	detail.PostId = data.PostId
-	detail.Link = data.Link
+	detail.Link = *data.Link
 
 	_, err = r.NewUpdate().Model(&detail).Where("id = ?", detail.Id).Exec(ctx)
 

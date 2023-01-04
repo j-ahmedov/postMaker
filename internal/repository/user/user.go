@@ -62,7 +62,7 @@ func (r Repository) Update(ctx context.Context, data user.Update) (entity.User, 
 	detail.Id = data.Id
 	detail.Username = data.Username
 	detail.Password = data.Password
-	detail.Avatar = &data.Avatar
+	detail.Avatar = data.Avatar
 
 	_, err = r.NewUpdate().Model(&detail).Where("id = ?", data.Id).Exec(ctx)
 

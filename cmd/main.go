@@ -83,12 +83,13 @@ func main() {
 	// Post File
 	r.GET("/post-file/list", postFileController.GetPostFileList).Use(middleware.Auth())
 	r.GET("/post-file/detail/:id", postFileController.GetPostFileById).Use(middleware.Auth())
-	r.POST("/post-file", postFileController.CreatePostFile).Use(middleware.Auth())
+	r.POST("/post-file", postFileController.CreateMultiplePostFiles).Use(middleware.Auth())
 	r.DELETE("/post-file/:id", postFileController.DeletePostFile).Use(middleware.Auth())
-	r.PUT("/post-file/update", postFileController.UpdatePostFile).Use(middleware.Auth())
+	r.PUT("/post-file/update", postFileController.UpdateMultiplePostFiles).Use(middleware.Auth())
 
 	// Comment
 	r.GET("/comment/list", commentController.GetCommentList).Use(middleware.Auth())
+	r.GET("/post/comment/list/:post_id", commentController.GetCommentListByPostId).Use(middleware.Auth())
 	r.GET("/comment/detail/:id", commentController.GetCommentById).Use(middleware.Auth())
 	r.GET("/post/comment/:post_id", commentController.GetCommentByPostId).Use(middleware.Auth())
 	r.POST("/comment/create", commentController.CreateComment).Use(middleware.Auth())

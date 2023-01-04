@@ -21,11 +21,15 @@ func (s Service) GetById(ctx context.Context, id int) (entity.PostFile, error) {
 	return s.repo.GetById(ctx, id)
 }
 
-func (s Service) Create(ctx context.Context, data Create) (entity.PostFile, error) {
+func (s Service) GetByPostId(ctx context.Context, postId int) (entity.PostFile, error) {
+	return s.repo.GetByPostId(ctx, postId)
+}
+
+func (s Service) Create(ctx context.Context, data MCreate) (entity.PostFile, error) {
 	return s.repo.Create(ctx, data)
 }
 
-func (s Service) Update(ctx context.Context, data Update) (entity.PostFile, error) {
+func (s Service) Update(ctx context.Context, data MUpdate) (entity.PostFile, error) {
 	return s.repo.Update(ctx, data)
 }
 
