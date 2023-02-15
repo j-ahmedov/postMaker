@@ -46,6 +46,6 @@ type UpdateForm struct {
 }
 
 type PostDetail struct {
-	Username string `json:"username"`
-	Avatar   string `json:"avatar"`
+	Username string  `json:"username"`
+	Avatar   *string `json:"avatar"`
 }

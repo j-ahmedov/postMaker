@@ -63,7 +63,7 @@ func (cu UseCase) GetCommentListByPostId(ctx context.Context, filter comment.Fil
 		detail.Id = r.Id
 		detail.Text = r.Text
 		detail.User.Username = user.Username
-		detail.User.Avatar = *user.Avatar
+		detail.User.Avatar = user.Avatar
 		detail.CreatedAt = r.CreatedAt.Format("02-01-2006")
 
 		list = append(list, detail)
@@ -89,7 +89,7 @@ func (cu UseCase) GetCommentById(ctx context.Context, id int) (comment.PostDetai
 	detail.Id = data.Id
 	detail.Text = data.Text
 	detail.User.Username = user.Username
-	detail.User.Avatar = *user.Avatar
+	detail.User.Avatar = user.Avatar
 	detail.CreatedAt = data.CreatedAt.Format("02-01-2006")
 
 	return detail, err
@@ -111,7 +111,7 @@ func (cu UseCase) GetCommentByPostId(ctx context.Context, postId int) (comment.P
 	detail.Id = data.Id
 	detail.Text = data.Text
 	detail.User.Username = user.Username
-	detail.User.Avatar = *user.Avatar
+	detail.User.Avatar = user.Avatar
 	detail.CreatedAt = data.CreatedAt.Format("02-01-2006")
 
 	return detail, err
@@ -133,7 +133,7 @@ func (cu UseCase) CreateComment(ctx context.Context, create comment.Create) (com
 	detail.Id = data.Id
 	detail.Text = data.Text
 	detail.User.Username = user.Username
-	detail.User.Avatar = *user.Avatar
+	detail.User.Avatar = user.Avatar
 	detail.CreatedAt = data.CreatedAt.Format("02-01-2006")
 
 	return detail, err

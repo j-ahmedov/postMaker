@@ -39,6 +39,29 @@ func (r Repository) GetById(ctx context.Context, id int) (entity.PostLike, error
 	return detail, err
 }
 
+func (r Repository) GetAllByPostId(ctx context.Context, filter post_like.Filter, postId int) ([]entity.PostLike, int, error) {
+	var list []entity.PostLike
+	q := r.NewSelect().Model(&list).Where("post_id = ?", postId)
+
+	if filter.Limit != nil {
+		q.Limit(*filter.Limit)
+	}
+	if filter.Offset != nil {
+		q.Limit(*filter.Offset)
+	}
+
+	count, err := q.ScanAndCount(ctx)
+
+	return list, count, err
+}
+
+func (r Repository) GetByUserAndPost(ctx context.Context, userId, postId int) (entity.PostLike, error) {
+	var detail entity.PostLike
+
+	err := r.NewSelect().Model(&detail).Where("user_id = ? AND post_id = ?", userId, postId).Scan(ctx)
+	return detail, err
+}
+
 func (r Repository) Create(ctx context.Context, data post_like.Create) (entity.PostLike, error) {
 	var detail entity.PostLike
 
@@ -46,22 +69,6 @@ func (r Repository) Create(ctx context.Context, data post_like.Create) (entity.P
 	detail.PostId = data.PostId
 
 	_, err := r.NewInsert().Model(&detail).Exec(ctx)
-
-	return detail, err
-}
-
-func (r Repository) Update(ctx context.Context, data post_like.Update) (entity.PostLike, error) {
-	var detail entity.PostLike
-
-	err := r.NewSelect().Model(&detail).Where("id = ?", data.Id).Scan(ctx)
-	if err != nil {
-		return entity.PostLike{}, err
-	}
-
-	detail.UserId = data.UserId
-	detail.PostId = data.PostId
-
-	_, err = r.NewUpdate().Model(&detail).Where("id = ?", detail.Id).Exec(ctx)
 
 	return detail, err
 }

@@ -1,5 +1,7 @@
 package post_like
 
+import "postMaker/internal/service/user"
+
 type Filter struct {
 	Limit  *int
 	Offset *int
@@ -22,8 +24,7 @@ type Create struct {
 	PostId int `json:"post_id"`
 }
 
-type Update struct {
-	Id     int `json:"id"`
-	UserId int `json:"user_id"`
-	PostId int `json:"post_id"`
+type LikeDetail struct {
+	Id   int             `json:"id"`
+	User user.PostDetail `json:"user"`
 }

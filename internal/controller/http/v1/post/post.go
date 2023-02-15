@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"postMaker/internal/service/auth"
 	"postMaker/internal/service/post"
+	"postMaker/internal/service/post_like"
 	post_usecase "postMaker/internal/usecase/post"
 	"strconv"
 	"strings"
@@ -23,7 +24,7 @@ func (cc Controller) GetPostList(c *gin.Context) {
 	tokenString := c.GetHeader("Authorization")
 	tokenString = strings.Split(tokenString, "Bearer ")[1]
 
-	_, err := auth.ParseToken(tokenString)
+	userData, err := auth.ParseToken(tokenString)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"message": err.Error(),
@@ -32,6 +33,7 @@ func (cc Controller) GetPostList(c *gin.Context) {
 		return
 	}
 
+	// Post Filter
 	var filter post.Filter
 	query := c.Request.URL.Query()
 
@@ -63,9 +65,41 @@ func (cc Controller) GetPostList(c *gin.Context) {
 		filter.Offset = &queryInt
 	}
 
+	// Like filter
+	var likeFilter post_like.Filter
+	likeQuery := c.Request.URL.Query()
+
+	likeLimitQ := likeQuery["limit"]
+	if len(likeLimitQ) > 0 {
+		queryInt, err := strconv.Atoi(likeLimitQ[0])
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"message": "Limit must be a number",
+				"status":  false,
+			})
+			return
+		}
+
+		likeFilter.Limit = &queryInt
+	}
+
+	likeOffsetQ := likeQuery["offset"]
+	if len(likeOffsetQ) > 0 {
+		queryInt, err := strconv.Atoi(likeOffsetQ[0])
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"message": "Offset must be number!",
+				"status":  false,
+			})
+			return
+		}
+
+		filter.Offset = &queryInt
+	}
+
 	ctx := context.Background()
 
-	list, count, err := cc.useCase.GetPostList(ctx, filter)
+	list, count, err := cc.useCase.GetPostList(ctx, filter, likeFilter, userData.Id)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"message": err.Error(),

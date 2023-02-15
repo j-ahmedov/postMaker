@@ -111,10 +111,10 @@ func main() {
 	r.DELETE("/post/:id", postController.DeletePost).Use(middleware.Auth())
 
 	// Post Like
-	r.GET("/post-like/list", postLikeController.GetPostLikeList).Use(middleware.Auth())
-	r.GET("/post-like/detail/:id", postLikeController.GetPostLikeById).Use(middleware.Auth())
+	//r.GET("/post-like/list", postLikeController.GetPostLikeList).Use(middleware.Auth())
+	r.GET("/post-like/list/:post-id", postLikeController.GetLikeListByPostId).Use(middleware.Auth())
+	//r.GET("/post-like/detail/:id", postLikeController.GetPostLikeById).Use(middleware.Auth())
 	r.POST("/post-like/create", postLikeController.CreatePostLike).Use(middleware.Auth())
-	r.PUT("/post-like/update", postLikeController.UpdatePostLike).Use(middleware.Auth())
 	r.DELETE("/post-like/:id", postLikeController.DeletePostLike).Use(middleware.Auth())
 
 	// User

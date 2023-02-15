@@ -21,6 +21,8 @@ type Detail struct {
 	Id          int                  `json:"id"`
 	Description string               `json:"description"`
 	CreatedAt   string               `json:"created_at"`
+	Liked       bool                 `json:"liked"`
+	Likes       int                  `json:"likes"`
 	Files       []string             `json:"files"`
 	User        user.PostDetail      `json:"user"`
 	Comments    []comment.PostDetail `json:"comments"`

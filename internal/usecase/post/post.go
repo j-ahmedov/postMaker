@@ -2,7 +2,9 @@ package post
 
 import (
 	"context"
+	"os"
 	"postMaker/internal/service/post"
+	"postMaker/internal/service/post_like"
 )
 
 type UseCase struct {
@@ -23,7 +25,7 @@ func NewUseCase(post Post, postLike PostLike, postFile PostFile, file File, user
 	}
 }
 
-func (cu UseCase) GetPostList(ctx context.Context, filter post.Filter) ([]post.Detail, int, error) {
+func (cu UseCase) GetPostList(ctx context.Context, filter post.Filter, likeFilter post_like.Filter, userId int) ([]post.Detail, int, error) {
 	data, count, err := cu.post.GetAll(ctx, filter)
 	if err != nil {
 		return nil, 0, err
@@ -44,12 +46,26 @@ func (cu UseCase) GetPostList(ctx context.Context, filter post.Filter) ([]post.D
 			return nil, 0, err2
 		}
 
+		_, likeCount, err3 := cu.postLike.GetAllByPostId(ctx, likeFilter, r.Id)
+		if err3 != nil {
+			return nil, 0, err3
+		}
+
+		_, err4 := cu.postLike.GetByUserAndPost(ctx, userId, detail.Id)
+		if err4 == nil {
+			detail.Liked = true
+		} else {
+			detail.Liked = false
+		}
+
 		detail.Id = r.Id
 		detail.Description = r.Description
 		detail.CreatedAt = r.CreatedAt.Format("02-01-2006")
+		detail.Likes = likeCount
 		detail.User.Username = user.Username
 		if user.Avatar != nil {
-			detail.User.Avatar = *user.Avatar
+			avatarLink := os.Getenv("BASE_URL") + *user.Avatar
+			detail.User.Avatar = &avatarLink
 		}
 		if postFile.Link != nil {
 			detail.Files = postFile.Link
@@ -84,7 +100,8 @@ func (cu UseCase) GetPostById(ctx context.Context, id int) (post.Detail, error) 
 	detail.CreatedAt = data.CreatedAt.Format("02-01-2006")
 	detail.User.Username = user.Username
 	if user.Avatar != nil {
-		detail.User.Avatar = *user.Avatar
+		avatarLink := os.Getenv("BASE_URL") + *user.Avatar
+		detail.User.Avatar = &avatarLink
 	}
 	if postFile.Link != nil {
 		detail.Files = postFile.Link
@@ -112,7 +129,8 @@ func (cu UseCase) CreatePost(ctx context.Context, create post.Create) (post.Deta
 	detail.CreatedAt = data.CreatedAt.Format("02-01-2006")
 	detail.User.Username = user.Username
 	if user.Avatar != nil {
-		detail.User.Avatar = *user.Avatar
+		avatarLink := os.Getenv("BASE_URL") + *user.Avatar
+		detail.User.Avatar = &avatarLink
 	}
 
 	return detail, err
@@ -137,7 +155,8 @@ func (cu UseCase) UpdatePost(ctx context.Context, update post.Update) (post.Deta
 	detail.CreatedAt = data.CreatedAt.Format("02-01-2006")
 	detail.User.Username = user.Username
 	if user.Avatar != nil {
-		detail.User.Avatar = *user.Avatar
+		avatarLink := os.Getenv("BASE_URL") + *user.Avatar
+		detail.User.Avatar = &avatarLink
 	}
 
 	return detail, err
